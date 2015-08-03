@@ -29,43 +29,34 @@ var sharedMethods = {
 
   },
 
-  contains : function(target){
-    if(this.value === target){
-      return true;
+  contains : function(value){
+  var found = false;
+  var finder = function(node){
+    if(node.value === value){
+      found = true;
     }
-    else if(target<this.value){
-      if(this.left ===null){
-        return;
-      }else{
-        return this.left.contains(target);
+    else{
+      if(node.right && value>node.value){
+        finder(node.right);
+      }
+      if(node.left && value<node.value){
+        finder(node.left);
       }
     }
-
-    else if(target>this.value){
-      if(this.right === null){
-        return;
-      }else{
-        return this.right.contains(target);
-      }
-    }
-
-
-    return false
+  }
+  finder(this)
+  return found;
   },
 
   depthFirstLog : function(cb){
 
     cb(this.value)
 
-    if(this.left === null){
-      return;
-    }else{
+    if(this.left !== null){
       this.left.depthFirstLog(cb);
     }
 
-    if(this.right === null){
-      return;
-    }else{
+    if(this.right !== null){
       this.right.depthFirstLog(cb);
     }
 
@@ -74,4 +65,7 @@ var sharedMethods = {
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ insert: O(log)
+ contains: O(Log)
+ depthFirstLog: O(Log)
  */
